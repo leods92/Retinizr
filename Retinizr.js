@@ -13,7 +13,7 @@
   var document = window.document
     , defaults = {
         css_class: 'hires_img' // The CSS class your upgradeable images have.
-      , source_suffix: '@2x' // The text before high resolution images' extension. E.g.: logo.png => logo@2x.png. Node: regular expression characters must be escaped.
+      , source_suffix: '@2x' // The text before high resolution images' extension. E.g.: logo.png => logo@2x.png. Note: regular expression characters must be escaped.
       , min_pixel_ratio: 1.5 // Apple Retina devices have 2.0 ratio but opted the default to be 1.5 as that's the ratio of some Android devices displays.
     }
   ;
