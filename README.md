@@ -7,31 +7,32 @@ Add CSS class `hires_img` (or another one, this is configurable) to all `img` el
 Afterwards, Retinizr with `Retinizr()`.
 
 For example:
-
-    <script src="Retinizr.min.js"></script>
-    <script>
-      Retinizr();
-    </script>
-
+```html
+<script src="Retinizr.min.js"></script>
+<script>
+  Retinizr();
+</script>
+```
 
 ## Settings
 Settings can be set by sending an object as the first parameter in the `Retinizr()` call.
 
 The options are:
 * `css_class`: The CSS class your upgradeable images have.
-* `source_suffix`: The text before high resolution images' extension. E.g.: if set to `"@2x"` then logo.png becomes logo@2x.png. Note: regular expression characters must be escaped.
+* `source_suffix`: The text before high resolution images' extension. E.g.: if set to `"@2x"` then `logo.png` becomes `logo@2x.png`. Note: regular expression characters must be escaped.
 * `min_pixel_ratio`: The density ratio of the screen you are targeting to. Apple Retina devices have 2.0 ratio and some Android devices 1.5. 1.0 is the standard we're all used to. You might want to check this [list of screen densities](http://en.wikipedia.org/wiki/List_of_displays_by_pixel_density), pay attention to the "CSS pixel ratio" columns.
 
 Here's an example:
-
-    <script src="Retinizr.min.js"></script>
-    <script>
-      Retinizr({
-        css_class: 'superultramega_hires_img',
-        source_suffix: '_hires',
-        min_pixel_ratio: 2.0
-      });
-    </script>
+```html
+<script src="Retinizr.min.js"></script>
+<script>
+  Retinizr({
+    css_class: 'superultramega_hires_img',
+    source_suffix: '_hires',
+    min_pixel_ratio: 2.0
+  });
+</script>
+```
 
 And here are the defaults that will be used in case you don't override them:
 * `css_class`: `"hires_img"`
