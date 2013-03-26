@@ -15,6 +15,8 @@
     return;
   }
 
+  var R = {};
+
   //
   // Options
   //
@@ -36,7 +38,7 @@
     , options = {}
   ;
 
-  function setOptions(_options) {
+  R.setOptions = function(_options) {
     _options = _options || {};
 
     var pickOption = function(custom, _default) {
@@ -61,39 +63,39 @@
 
       options[prop] = pickOption(_options[prop], defaults[prop]);
     }
-  }
+  };
 
 
   //
   // DOM searching
   //
-  function getList(css_class) {
+  R.getList = function(css_class) {
     return document.getElementsByClassName(css_class);
-  }
+  };
 
 
   //
   // Images
   //
-  function scaleImages() {
-    var images = getImagesList();
-    scaleItems("scaleImage", images);
-  }
+  R.scaleImages = function() {
+    var images = R.getImagesList();
+    R.scaleItems("scaleImage", images);
+  };
 
-  function getImagesList() {
-    return getList(options.images.css_class);
-  }
+  R.getImagesList = function() {
+    return R.getList(options.images.css_class);
+  };
 
-  function scaleImage(img) {
-    var new_src = img.src.replace(/^(.*)(\.[a-z]{3,4})$/, '$1' + options.images.source_suffix + '$2');
+  R.scaleImage = function(img) {
+    var new_src = img.src.replace(/^(.*)(\.[a-z]{3,4})?$/, '$1' + options.images.source_suffix + '$2');
 
-    loadImage(new_src, function() {
+    R.loadImage(new_src, function() {
       // Retinizr will first load the image then replace for a better user experience.
       img.src = new_src;
     });
-  }
+  };
 
-  function loadImage(src, callback) {
+  R.loadImage = function(src, callback) {
     var xhr = new XMLHttpRequest();
 
     xhr.open("GET", src, true);
@@ -104,87 +106,96 @@
       }
     };
     xhr.send();
-  }
+  };
 
 
   //
   // Google Static Maps
   //
-  function scaleGoogleStaticMaps() {
-    var maps = getGoogleStaticMapsList();
-    scaleItems("scaleGoogleStaticMap", maps);
-  }
+  R.scaleGoogleStaticMaps = function() {
+    var maps = R.getGoogleStaticMapsList();
+    R.scaleItems("scaleGoogleStaticMap", maps);
+  };
 
-  function getGoogleStaticMapsList() {
-    return getList(options.google_static_maps.css_class);
-  }
+  R.getGoogleStaticMapsList = function() {
+    return R.getList(options.google_static_maps.css_class);
+  };
 
-  function scaleGoogleStaticMap(map) {
-    map.src = map.src.replace("scale=1", "scale=2");
-  }
+  R.scaleGoogleStaticMap = function(map) {
+    var dimensions = map.src.match(/size=([0-9]+)x([0-9]+)/);
+
+    map.width = dimensions[1];
+    map.height = dimensions[2];
+    map.src = map.src.replace("scale=1", "scale=" + options.google_static_maps.scale);
+  };
 
 
   //
   // Gravatars
   //
-  function scaleGravatars() {
-    var gravatars = getGravatarsList();
-    scaleItems("scaleGravatar", gravatars);
-  }
+  R.scaleGravatars = function() {
+    var gravatars = R.getGravatarsList();
+    R.scaleItems("scaleGravatar", gravatars);
+  };
 
-  function getGravatarsList() {
-    return getList(options.gravatars.css_class);
-  }
+  R.getGravatarsList = function() {
+    return R.getList(options.gravatars.css_class);
+  };
 
-  function scaleGravatar(gravatar) {
-    gravatar.src = gravatar.src.replace(/(size|s)=([0-9]+)/, "$1" + parseInt("$2", 10)*options.gravatar.scale);
-  }
+  R.scaleGravatar = function(gravatar) {
+    var regex = /(size|s)=([0-9]+)/
+      , size  = gravatar.src.match(regex)[2]
+    ;
+
+    gravatar.width = size;
+    gravatar.src = gravatar.src.replace(regex, "$1=" + parseInt(size, 10) * options.gravatars.scale);
+  };
 
 
   //
   // Helpers
   //
-  function scaleItems(scalingFunction, items) {
+  R.scaleItems = function(scalingFunction, items) {
     if (!items) return; // returns if null or undefined
 
     Array.prototype.forEach.call(items, function(item) {
-      checkHTMLElement(item);
+      R.checkHTMLElement(item);
       // It'll only replace the image if it's not already the high resolution version.
-      if (!deviceRequiresRetinazation() || elIsRetinized(item)) return;
+      if (!R.deviceRequiresRetinazation() || R.elIsRetinized(item)) return;
 
-      this[scalingFunction](item);
-      setElAsRetinized(item);
+      R[scalingFunction](item);
+      R.setElAsRetinized(item);
     });
-  }
+  };
 
-  function checkHTMLElement(el) {
+  R.checkHTMLElement = function(el) {
     if (!(el instanceof HTMLImageElement)) {
       throw "Element has proper class was supposed to be retinized but is not an img element.";
     }
-  }
+  };
 
-  function elIsRetinized(el) {
-    return !!el['data-retinized'];
-  }
+  R.elIsRetinized = function(el) {
+    return !!el.getAttribute('data-retinized');
+  };
 
-  function setElAsRetinized(el) {
-    el['data-retinized'] = true;
-  }
+  R.setElAsRetinized = function(el) {
+    el.setAttribute('data-retinized', true);
+  };
 
-  function deviceRequiresRetinazation() {
+  R.deviceRequiresRetinazation = function() {
     return window.devicePixelRatio >= options.min_pixel_ratio;
-  }
+  };
 
 
   //
   // Exposes Retinizr
   //
   window.Retinizr = function(_options) {
-    setOptions(_options);
+    R.setOptions(_options);
 
-    if (_options.scaleImages !== false) scaleImages();
-    if (_options.google_static_maps) scaleGoogleStaticMaps();
-    if (_options.gravatars) scaleGravatars();
+    if (_options.scaleImages !== false) R.scaleImages();
+    if (_options.google_static_maps) R.scaleGoogleStaticMaps();
+    if (_options.gravatars) R.scaleGravatars();
   };
 
 })(window, window.document);

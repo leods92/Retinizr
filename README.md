@@ -7,8 +7,10 @@ A jQuery-less script that replaces images with ones optmized for high density de
 
 ## Usage
 Include `Retinizr.min.js` in the `head` or at the end of the `body` (prefferable) section of your HTML document.
-Add CSS class `hires_img` (or the one you configured) to all `img` elements you want to provide a high resolution version.
-Afterwards, cakk Retinizr with `Retinizr()`.
+When DOM is ready, call Retinizr with `Retinizr()`. You may do that by adding the function at the end of the `body`.
+
+### Images
+Add CSS class `hires-image` (or set a custom class in Retinizr's options) to all `img` elements you want to provide a high resolution version. Don't forget to set images' physical width and height.
 
 For example:
 ```html
@@ -19,15 +21,16 @@ For example:
     <script src="Retinizr.min.js"></script>
   </head>
   <body>
-    <img src="" alt="" />
+    <img src="http://example.com/image.jpg" class="hires-image" width="100" height="100" />
     <script>
       Retinizr();
     </script>
   </body>
 ```
-### Google Static Maps API (v2)
+
+### Google Static Maps
 Google provides an execellent API to retrieve images of maps. As the images are static you get what you get and scalling them will cause distortion. Hopefully, Google accepts a parameter call `scale` which generate another image with the *exactly* same viewport size and position but denser.
-Retinizr deals with that automatically for you.
+Retinizr deals with that automatically for you as long as you're using the version 2 of Google's API.
 
 This is disabled by default though.
 In order to enable it, when calling `Retinizr()` set the option `google_static_maps` to `true` or an object (`{...}`) containing the options you want.
