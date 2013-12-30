@@ -1,5 +1,5 @@
 /*!preserve
- * Retinizr - version 0.1.2
+ * Retinizr - version 0.1.3
  * Copyright (c) 2013, 2014 Leonardo D. Schlossmacher (leods92.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -123,11 +123,19 @@
   };
 
   R.scaleGoogleStaticMap = function(map) {
-    var dimensions = map.src.match(/size=([0-9]+)x([0-9]+)/);
+    var dimensions = map.src.match(/size=([0-9]+)x([0-9]+)/),
+      regExp = /scale=1/
+    ;
 
     map.width = dimensions[1];
     map.height = dimensions[2];
-    map.src = map.src.replace("scale=1", "scale=" + options.google_static_maps.scale);
+
+    if (map.src.match(regExp)) {
+      map.src = map.src.replace(regExp, "scale=" + options.google_static_maps.scale);
+    }
+    else {
+      map.src += "&scale=2";
+    }
   };
 
 
