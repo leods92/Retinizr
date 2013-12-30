@@ -1,7 +1,3 @@
-**Attention:** the API has changed in version `0.1.1`.
-Now, you are required to send image-scaling related options wrapped in an object called `images`, e.g. `Retinizr({ images: { ... } })`.
-The default images' css class is now `hires-image`. You can keep your mark-up and just call `Retinizr({ images: { css_class: "hires_img"} })` to mimic `0.1.0` version behavior.
-
 # Retinizr
 A jQuery-less script that replaces images with ones optmized for high density devices (as those with Apple Retina).
 
@@ -145,7 +141,7 @@ Here's an example:
 ```
 
 ## License
-Copyright (c) 2013, Leonardo D. Schlossmacher.
+Copyright (c) 2013, 2014 Leonardo D. Schlossmacher.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
