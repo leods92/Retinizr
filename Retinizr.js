@@ -1,5 +1,5 @@
 /*!preserve
- * Retinizr - version 0.1.3
+ * Retinizr - version 0.1.4
  * Copyright (c) 2013, 2014 Leonardo D. Schlossmacher (leods92.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -25,6 +25,7 @@
       , images: {
           css_class: "hires-image" // The CSS class your upgradeable images have.
         , source_suffix: "@2x" // The text before high resolution images' extension. E.g.: logo.png => logo@2x.png. Note: regular expression characters must be escaped.
+        , data_attribute: "retinizr-hires-url" // ~> data-retinizr-hires-url
       }
       , google_static_maps: {
           css_class: "hires-map"
@@ -86,9 +87,22 @@
     return R.getList(options.images.css_class);
   };
 
+  R.scaledImageName = function(img) {
+    var data_attribute = "data-" + options.images.data_attribute
+      , manual_url = img.getAttribute(data_attribute)
+    ;
+
+    if (manual_url) {
+      return manual_url;
+    }
+    else {
+      // about ".*?" - the "?" prevents it from not matching the extension
+      return img.src.replace(/^(.*?)(\.[a-z]{3,4})?$/, '$1' + options.images.source_suffix + '$2');
+    }
+  };
+
   R.scaleImage = function(img) {
-    // about ".*?" - the "?" prevents it from not matching the extension
-    var new_src = img.src.replace(/^(.*?)(\.[a-z]{3,4})?$/, '$1' + options.images.source_suffix + '$2');
+    var new_src = R.scaledImageName(img);
 
     R.loadImage(new_src, function() {
       // Retinizr will first load the image then replace for a better user experience.

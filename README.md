@@ -7,6 +7,7 @@ When DOM is ready, call Retinizr with `Retinizr()`. You may do that by adding th
 
 ### Images
 Add CSS class `hires-image` (or set a custom class in Retinizr's options) to all `img` elements you want to provide a high resolution version. Don't forget to set images' physical width and height.
+There are more options available, read further.
 
 For example:
 ```html
@@ -23,6 +24,29 @@ For example:
     </script>
   </body>
 ```
+
+#### Data attribute
+If your assets are named after their version – usually with a md5 hash as Rails' [AssetPipeline](http://guides.rubyonrails.org/asset_pipeline.html) does, e.g. `my_image-d131dd02c5e6eec4.png` – above implementation will not work. And the reason is that Retinizr cannot know what's the higher resolution image name because lower and higher resolution images have different hashes.
+For this scenario you can manually provide the name of the higher resolution by adding `data-retinizr-hires-url` attribute to the `img` tag.
+This attribute name is customizable.
+
+For example:
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="Retinizr.min.js"></script>
+  </head>
+  <body>
+    <img src="http://example.com/image-716495495f615d1eb9caad17a0cef745.jpg" class="hires-image" data-retinizr-hires-url="http://example.com/image@2x-146395495f615d1eb9caad16a0dxf111.jpg" width="100" height="100" />
+    <script>
+      Retinizr();
+    </script>
+  </body>
+```
+
+*Note: you still need to provide `hires-image` class.*
 
 ### Google Static Maps
 Google provides an execellent API to retrieve images of maps. As the images are static you get what you get and scalling them will cause distortion. Hopefully, Google accepts a parameter call `scale` which generate another image with the *exactly* same viewport size and position but denser.
@@ -80,6 +104,7 @@ To use these you should set an object with the options you want to the `images` 
 Defaults:
 * `css_class`: `highres-image`
 * `source_suffix`: `"@2x"`
+* `data_attribute`: `"retinizr-hires-url"`
 
 Here's an example:
 ```html
@@ -88,7 +113,8 @@ Here's an example:
   Retinizr({
     images: {
       css_class: "my-much-cooler-custom-css-class",
-      source_suffix: "_highres"
+      source_suffix: "_highres",
+      data_attribute: "retinizr-much-cooler-name-url"
     }
   });
 </script>
