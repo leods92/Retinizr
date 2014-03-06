@@ -1,3 +1,6 @@
+# Version 0.1.5
+* Enhacement: manually setting image dimensions is no longer necessary.
+
 # Version 0.1.4
 * Added data- attribute support. Useful with version-named assets.
 
