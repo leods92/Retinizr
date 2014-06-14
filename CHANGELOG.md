@@ -1,3 +1,6 @@
+# Version 0.1.6
+* Fixed bug: Retinizr now waits images to be fully loaded so that it can capture their original sizes.
+
 # Version 0.1.5
 * Enhacement: manually setting image dimensions is no longer necessary.
 

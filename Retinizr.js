@@ -1,5 +1,5 @@
 /*!preserve
- * Retinizr - version 0.1.5
+ * Retinizr - version 0.1.6
  * Copyright (c) 2013, 2014 Leonardo D. Schlossmacher (leods92.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -189,11 +189,19 @@
 
     Array.prototype.forEach.call(items, function(item) {
       R.checkHTMLElement(item);
-      // It'll only replace the image if it's not already the high resolution version.
-      if (!R.deviceRequiresRetinazation() || R.elIsRetinized(item)) return;
+      if (!R.deviceRequiresRetinazation()) return;
 
-      R[scalingFunction](item);
-      R.setElAsRetinized(item);
+      // Assures images are fully loaded before scaling them.
+      // This is necessary because we need image's dimensions.
+      $(item).load(function() {
+        // It'll only replace the image if it's not already
+        // the high resolution version.
+        // Otherwise we'd be in a loop.
+        if (R.elIsRetinized(item)) { return; }
+
+        R[scalingFunction](item);
+        R.setElAsRetinized(item);
+      });
     });
   };
 
@@ -219,12 +227,12 @@
   //
   // Exposes Retinizr
   //
-  window.Retinizr = function(_options) {
-    R.setOptions(_options);
+  window.Retinizr = function(options) {
+    R.setOptions(options);
 
-    if (_options.scaleImages !== false) R.scaleImages();
-    if (_options.google_static_maps) R.scaleGoogleStaticMaps();
-    if (_options.gravatars) R.scaleGravatars();
+    if (options.scaleImages !== false) R.scaleImages();
+    if (options.google_static_maps) R.scaleGoogleStaticMaps();
+    if (options.gravatars) R.scaleGravatars();
   };
 
 })(window, window.document);
