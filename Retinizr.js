@@ -212,11 +212,11 @@
 
       // Assures images are fully loaded before scaling them.
       // This is necessary because we need image's dimensions.
-      $(item).load(function() {
         // It'll only replace the image if it's not already
         // the high resolution version.
         // Otherwise we'd be in a loop.
         if (R.elIsRetinized(item)) { return; }
+      item.addEventListener("load", function() {
 
         R[scalingFunction](item);
         R.setElAsRetinized(item);
