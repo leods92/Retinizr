@@ -1,5 +1,6 @@
 # TODO
 * Better organize code by adding different name spaces.
+* Add tests already!
 
 # Version 1.0.0
 * Standardized variables to be camelCased.
