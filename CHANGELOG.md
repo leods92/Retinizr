@@ -1,3 +1,6 @@
+# Version 1.0.1
+* Fixed bug regarding fluid map and cached image.
+
 # Version 1.0.0
 * Standardized variables to be camelCased.
 * Changed defaults to follow Github [CSS Style Guide](https://github.com/styleguide) and prepend js- to classes used in JavaScript (may break some implementations).
