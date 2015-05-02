@@ -24,30 +24,30 @@
 
   var defaults = {
       // Apple Retina devices have 2.0 ratio but I opted the default to be 1.5 as that's the ratio of some Android devices displays.
-      max_pixel_ratio: 1.5
+      minPixelRatio: 1.5
 
     , images: {
         // The CSS class your upgradeable images have.
-        css_class: "js-retinizr-image"
+        cssClass: "js-retinizr-image"
 
         // The text before high resolution images' extension.
         // E.g.: logo.png => logo@2x.png.
         // Note: regular expression characters must be escaped.
-      , source_suffix: "@2x"
+      , sourceSuffix: "@2x"
 
         // ~> data-retinizr-hires-url
-      , data_attribute: "retinizr-hires-url"
+      , dataAttribute: "retinizr-hires-url"
     }
 
     , googleStaticMaps: {
-        css_class: "js-retinizr-map"
+        cssClass: "js-retinizr-map"
 
       // Google also provides scale=4 for Business API users
       , scale: 2
     }
 
     , gravatars: {
-        css_class: "js-retinizr-gravatar"
+        cssClass: "js-retinizr-gravatar"
 
       // Be careful not to exceed Gravatar's limit that is 2048px.
       // Note that even though the image provided will be in the requested
@@ -89,8 +89,8 @@
   //
   // DOM searching
   //
-  R.getList = function(css_class) {
-    return document.getElementsByClassName(css_class);
+  R.getList = function(cssClass) {
+    return document.getElementsByClassName(cssClass);
   };
 
 
@@ -103,20 +103,20 @@
   };
 
   R.getImagesList = function() {
-    return R.getList(options.images.css_class);
+    return R.getList(options.images.cssClass);
   };
 
   R.scaledImageName = function(img) {
-    var data_attribute = "data-" + options.images.data_attribute
-      , manual_url = img.getAttribute(data_attribute)
+    var dataAttribute = "data-" + options.images.dataAttribute
+      , manualUrl = img.getAttribute(dataAttribute)
     ;
 
-    if (manual_url) {
-      return manual_url;
+    if (manualUrl) {
+      return manualUrl;
     }
     else {
       // about ".*?" - the "?" prevents it from not matching the extension
-      return img.src.replace(/^(.*?)(\.[a-z]{3,4})?$/, '$1' + options.images.source_suffix + '$2');
+      return img.src.replace(/^(.*?)(\.[a-z]{3,4})?$/, '$1' + options.images.sourceSuffix + '$2');
     }
   };
 
@@ -158,7 +158,7 @@
   };
 
   R.getGoogleStaticMapsList = function() {
-    return R.getList(options.google_static_maps.css_class);
+    return R.getList(options.googleStaticMaps.cssClass);
   };
 
   R.scaleGoogleStaticMap = function(map) {
@@ -239,7 +239,7 @@
   };
 
   R.deviceRequiresRetinazation = function() {
-    return window.devicePixelRatio >= options.min_pixel_ratio;
+    return window.devicePixelRatio >= options.minPixelRatio;
   };
 
 
@@ -250,7 +250,7 @@
     R.setOptions(options);
 
     if (options.scaleImages !== false) R.scaleImages();
-    if (options.google_static_maps) R.scaleGoogleStaticMaps();
+    if (options.googleStaticMaps) R.scaleGoogleStaticMaps();
     if (options.gravatars) R.scaleGravatars();
   };
 
