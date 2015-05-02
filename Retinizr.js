@@ -212,30 +212,32 @@
 
       // Assures images are fully loaded before scaling them.
       // This is necessary because we need image's dimensions.
-        // It'll only replace the image if it's not already
-        // the high resolution version.
-        // Otherwise we'd be in a loop.
-        if (R.elIsRetinized(item)) { return; }
       item.addEventListener("load", function() {
+        // It'll only replace the image if it wasn't scaled yet.
+        // Otherwise we'd be in a loop, given that new image
+        // may also trigger the load event.
+        if (R.elWasScaled(item)) { return; }
+
+        if (R.deviceRequiresRetinazation()) {
 
         R[scalingFunction](item);
-        R.setElAsRetinized(item);
+        R.setElWasScaled(item);
       });
     });
   };
 
   R.checkHTMLElement = function(el) {
     if (!(el instanceof HTMLImageElement)) {
-      throw "Element has proper class was supposed to be retinized but is not an img element.";
+      throw "Element is not an img element.";
     }
   };
 
-  R.elIsRetinized = function(el) {
-    return !!el.getAttribute('data-retinized');
+  R.elWasScaled = function(el) {
+    return !!el.getAttribute('data-retinizr-scaled');
   };
 
-  R.setElAsRetinized = function(el) {
-    el.setAttribute('data-retinized', true);
+  R.setElWasScaled = function(el) {
+    el.setAttribute('data-retinizr-scaled', true);
   };
 
   R.deviceRequiresRetinazation = function() {
