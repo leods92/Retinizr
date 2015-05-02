@@ -210,7 +210,7 @@
       R.checkHTMLElement(item);
       if (!R.deviceRequiresRetinazation()) return;
 
-      // Assures images are fully loaded before scaling them.
+      // Ensures images are fully loaded before scaling them.
       // This is necessary because we need image's dimensions.
       item.addEventListener("load", function() {
         // It'll only replace the image if it wasn't scaled yet.
