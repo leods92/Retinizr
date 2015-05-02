@@ -163,14 +163,25 @@
     return R.getList(options.googleStaticMaps.cssClass);
   };
 
+  // If measurements have no unit, px is assumed.
+  R.updateGoogleStaticMapDimensions = function(map, width, height) {
+    // It's important to set width/height via .style,
+    // otherwise because width is set height is ignored
+    // (to keep proportion, apparently.)
+    // Height must be set beforehand, to avoid page reflow.
+    map.style.height = typeof height == "string" ? height : height + "px";
+    map.style.width = typeof width == "string" ? width : width + "px";
+  };
+
   R.scaleGoogleStaticMap = function(map) {
     var dimensions  = map.src.match(R.googleStaticMapsUrlSizeRegexp)
       , scaleRegExp = /scale=1/
       , newScale    = options.googleStaticMaps.scale
     ;
 
-    map.width = dimensions[1];
-    map.height = dimensions[2];
+    // Saving "displayed resolution" so that new scale keeps size
+    // but increses pixel density.
+    R.updateGoogleStaticMapDimensions(map, dimensions[1], dimensions[2]);
 
     if (map.src.match(scaleRegExp)) {
       newSrc = newSrc.replace(scaleRegExp, "scale=" + newScale);
