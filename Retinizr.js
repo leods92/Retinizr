@@ -39,8 +39,8 @@
     , options = {}
   ;
 
-  R.setOptions = function(_options) {
-    _options = _options || {};
+  R.setOptions = function(newOptions) {
+    newOptions = newOptions || {};
 
     var pickOption = function(custom, _default) {
       return typeof custom !== "undefined" ? custom : _default;
@@ -49,7 +49,7 @@
     for (var prop in defaults) {
       if (typeof defaults[prop] === "object") {
         // In case a boolean was set, we'll set all options as default.
-        if (typeof _options[prop] !== "object") {
+        if (typeof newOptions[prop] !== "object") {
           options[prop] = defaults[prop];
           continue;
         }
@@ -57,12 +57,13 @@
         options[prop] = {};
 
         for (var childProp in defaults[prop]) {
-          options[prop][childProp] = pickOption(_options[prop][childProp], defaults[prop][childProp]);
+          options[prop][childProp] =
+            pickOption(newOptions[prop][childProp], defaults[prop][childProp]);
         }
         continue;
       }
 
-      options[prop] = pickOption(_options[prop], defaults[prop]);
+      options[prop] = pickOption(newOptions[prop], defaults[prop]);
     }
   };
 
