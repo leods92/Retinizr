@@ -23,7 +23,9 @@
   var options = {};
 
   var defaults = {
-      // Apple Retina devices have 2.0 ratio but I opted the default to be 1.5 as that's the ratio of some Android devices displays.
+      // Apple Retina devices have 2.0 ratio (except iPhone 6+)
+      // but I opted the default to be 1.5 as that's the ratio
+      // of some Android devices displays.
       minPixelRatio: 1.5
 
     , images: {
