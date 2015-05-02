@@ -124,10 +124,12 @@ Here's an example:
 To use these you should set an object with the options you want to the `google_static_maps` key of the main options object.
 
 * `css_class`: The CSS class your scalable map images have.
+* `fluidCssClass`: The class of maps that should have fluidity enabled. Such maps will expand to 100% of parent container's width on load, screen resize and screen orientation change. Images may be distorted if parent container's width is longer than *640 px* and you're using Google's free API.
 * `scale`: The number by which the size of the original map will be multiplied. Google accepts 1, 2, 4 (the latter available for business customers only).
 
 Defaults:
 * `css_class`: `js-retinizr-map`
+* `fluidCssClass`: `js-retinizr-fluid`
 * `scale`: `2`
 
 Here's an example:

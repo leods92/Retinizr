@@ -42,6 +42,16 @@
     , googleStaticMaps: {
         cssClass: "js-retinizr-map"
 
+      // fluidCssClass is used to automatically change width
+      // based on image's container.
+      // This affects also images that won't be scaled to
+      // the higher resolution.
+      //
+      // Watch out: this feature is inteded for mobile devices.
+      // That said, if you use the free static maps API,
+      // Google will limit "browser width" to 640px 
+      , fluidCssClass: "js-retinizr-fluid"
+
       // Google also provides scale=4 for Business API users
       , scale: 2
     }
@@ -173,10 +183,67 @@
     map.style.width = typeof width == "string" ? width : width + "px";
   };
 
+  R.updateFluidGoogleStaticMapResizeTimeout = null;
+
+  // This also handles mobile devices orientation changes.
+  R.updateFluidGoogleStaticMapOnResize = function(map) {
+    clearTimeout(R.updateFluidGoogleStaticMapResizeTimeout);
+
+    R.updateFluidGoogleStaticMapResizeTimeout = setTimeout(function() {
+      R.updateFluidGoogleStaticMap(map);
+    }, 500);
+  };
+
+  R.updateFluidGoogleStaticMapSrc = function(map, src, beforeRequestCb) {
+    // Hiding image not to display distorted image while the new one loads.
+    map.style.visibility = "hidden";
+
+    if (beforeRequestCb) { beforeRequestCb(); }
+
+    map.src = src;
+
+    map.addEventListener("load", function() {
+      map.style.visibility = "visible";
+    });
+
+    // Triggering load manually when image is already cached.
+    if (map.complete) {
+      item.dispatchEvent(new UIEvent("load"));
+    }
+  };
+
+  R.updateFluidGoogleStaticMap = function(map, src) {
+    // Using clientWidth not offsetWidth not to get borders.
+    var newWidth     = map.parentNode.clientWidth
+      , cachedHeight = map.offsetHeight
+      , newSize      = "size=" + newWidth + "x$2"
+    ;
+
+    // Useful to be called when src is being changed by another function.
+    // Thus preventing a second HTTP request from being performed.
+    src = src || map.src;
+    src = src.replace(R.googleStaticMapsUrlSizeRegexp, newSize);
+
+    if (map.src != src) {
+      R.updateFluidGoogleStaticMapSrc(map, src, function() {
+        R.updateGoogleStaticMapDimensions(map, newWidth, cachedHeight);
+      });
+    }
+
+    // "If multiple identical EventListeners are registered on the same
+    // EventTarget with the same parameters, the duplicate instances
+    // are discarded."
+    // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Multiple_identical_event_listeners
+    window.addEventListener("resize", function() {
+      R.updateFluidGoogleStaticMapOnResize(map);
+    });
+  };
+
   R.scaleGoogleStaticMap = function(map) {
     var dimensions  = map.src.match(R.googleStaticMapsUrlSizeRegexp)
       , scaleRegExp = /scale=1/
       , newScale    = options.googleStaticMaps.scale
+      , newSrc      = map.src
     ;
 
     // Saving "displayed resolution" so that new scale keeps size
@@ -188,6 +255,13 @@
     }
     else {
       newSrc += "&scale=" + newScale;
+    }
+
+    if (~map.className.indexOf(options.googleStaticMaps.fluidCssClass)) {
+      R.updateFluidGoogleStaticMap(map, newSrc);
+    }
+    else {
+      map.src = newSrc;
     }
   };
 
@@ -222,7 +296,6 @@
 
     Array.prototype.forEach.call(items, function(item) {
       R.checkHTMLElement(item);
-      if (!R.deviceRequiresRetinazation()) return;
 
       // Ensures images are fully loaded before scaling them.
       // This is necessary because we need image's dimensions.
@@ -233,8 +306,14 @@
         if (R.elWasScaled(item)) { return; }
 
         if (R.deviceRequiresRetinazation()) {
+          R[scalingFunction](item);
+        }
+        else if (scalingFunction == "scaleGoogleStaticMap") {
+          // To save an extra HTTP request, scaleGoogleStaticMaps
+          // already makes width fluid when retinizing (above).
+          R.updateFluidGoogleStaticMap(item);
+        }
 
-        R[scalingFunction](item);
         R.setElWasScaled(item);
       });
 
