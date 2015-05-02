@@ -6,7 +6,7 @@ Include `Retinizr.min.js` in the `head` or at the end of the `body` (prefferable
 When DOM is ready, call Retinizr with `Retinizr()`. You may do that by adding the function at the end of the `body`.
 
 ### Images
-Add CSS class `hires-image` (or set a custom class in Retinizr's options) to all `img` elements you want to provide a high resolution version. Don't forget to set images' physical width and height.
+Add CSS class `js-retinizr-image` (or set a custom class in Retinizr's options) to all `img` elements you want to provide a high resolution version. Don't forget to set images' physical width and height.
 There are more options available, read further.
 
 For example:
@@ -18,7 +18,7 @@ For example:
     <script src="Retinizr.min.js"></script>
   </head>
   <body>
-    <img src="http://example.com/image.jpg" class="hires-image" width="100" height="100" />
+    <img src="http://example.com/image.jpg" class="js-retinizr-image" width="100" height="100" />
     <script>
       Retinizr();
     </script>
@@ -39,14 +39,14 @@ For example:
     <script src="Retinizr.min.js"></script>
   </head>
   <body>
-    <img src="http://example.com/image-716495495f615d1eb9caad17a0cef745.jpg" class="hires-image" data-retinizr-hires-url="http://example.com/image@2x-146395495f615d1eb9caad16a0dxf111.jpg" width="100" height="100" />
+    <img src="http://example.com/image-716495495f615d1eb9caad17a0cef745.jpg" class="js-retinizr-image" data-retinizr-hires-url="http://example.com/image@2x-146395495f615d1eb9caad16a0dxf111.jpg" width="100" height="100" />
     <script>
       Retinizr();
     </script>
   </body>
 ```
 
-*Note: you still need to provide `hires-image` class.*
+*Note: you still need to provide `js-retinizr-image` class.*
 
 ### Google Static Maps
 Google provides an execellent API to retrieve images of maps. As the images are static you get what you get and scalling them will cause distortion. Hopefully, Google accepts a parameter call `scale` which generate another image with the *exactly* same viewport size and position but denser.
@@ -102,7 +102,7 @@ To use these you should set an object with the options you want to the `images` 
 * `source_suffix`: The text before high resolution images' extension. E.g.: if set to `"@2x"` then `logo.png` becomes `logo@2x.png`. Note: regular expression characters must be escaped.
 
 Defaults:
-* `css_class`: `highres-image`
+* `css_class`: `js-retinizr-image`
 * `source_suffix`: `"@2x"`
 * `data_attribute`: `"retinizr-hires-url"`
 
@@ -127,7 +127,7 @@ To use these you should set an object with the options you want to the `google_s
 * `scale`: The number by which the size of the original map will be multiplied. Google accepts 1, 2, 4 (the latter available for business customers only).
 
 Defaults:
-* `css_class`: `highres-map`
+* `css_class`: `js-retinizr-map`
 * `scale`: `2`
 
 Here's an example:
@@ -150,7 +150,7 @@ To use these you should set an object with the options you want to the `gravatar
 * `scale`: The number by which the size of the original gravatar will be multiplied.
 
 Defaults:
-* `css_class`: `highres-gravatar`
+* `css_class`: `js-retinizr-gravatar`
 * `scale`: `2`
 
 Here's an example:

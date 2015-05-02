@@ -23,22 +23,39 @@
   var options = {};
 
   var defaults = {
-      min_pixel_ratio: 1.5 // Apple Retina devices have 2.0 ratio but I opted the default to be 1.5 as that's the ratio of some Android devices displays.
+      // Apple Retina devices have 2.0 ratio but I opted the default to be 1.5 as that's the ratio of some Android devices displays.
+      max_pixel_ratio: 1.5
+
     , images: {
-        css_class: "hires-image" // The CSS class your upgradeable images have.
-      , source_suffix: "@2x" // The text before high resolution images' extension. E.g.: logo.png => logo@2x.png. Note: regular expression characters must be escaped.
-      , data_attribute: "retinizr-hires-url" // ~> data-retinizr-hires-url
+        // The CSS class your upgradeable images have.
+        css_class: "js-retinizr-image"
+
+        // The text before high resolution images' extension.
+        // E.g.: logo.png => logo@2x.png.
+        // Note: regular expression characters must be escaped.
+      , source_suffix: "@2x"
+
+        // ~> data-retinizr-hires-url
+      , data_attribute: "retinizr-hires-url"
     }
-    , google_static_maps: {
-        css_class: "hires-map"
-      , scale: 2 // Google also provides scale=4 for Business API users
+
+    , googleStaticMaps: {
+        css_class: "js-retinizr-map"
+
+      // Google also provides scale=4 for Business API users
+      , scale: 2
     }
+
     , gravatars: {
-        css_class: "hires-gravatar"
-      , scale: 2 // Be careful not to exceed Gravatar's limit that is 2048px. Note that even though the image provided will be in the requested size, user's source image might not be that big and so the quality may be compromised.
+        css_class: "js-retinizr-gravatar"
+
+      // Be careful not to exceed Gravatar's limit that is 2048px.
+      // Note that even though the image provided will be in the requested
+      // size, user's source image might not be that big and
+      // so the quality may be compromised.
+      , scale: 2
     }
   };
-
 
   R.setOptions = function(newOptions) {
     newOptions = newOptions || {};
