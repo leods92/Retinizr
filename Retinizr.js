@@ -223,6 +223,12 @@
         R[scalingFunction](item);
         R.setElWasScaled(item);
       });
+
+      // If image is cached, no load event is triggered.
+      // Therefore its callbacks should be triggered manually.
+      if (item.complete) {
+        item.dispatchEvent(new UIEvent("load"));
+      }
     });
   };
 
