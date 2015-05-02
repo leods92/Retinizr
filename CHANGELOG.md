@@ -1,7 +1,3 @@
-# TODO
-* Better organize code by adding different name spaces.
-* Add tests already!
-
 # Version 1.0.0
 * Standardized variables to be camelCased.
 * Changed defaults to follow Github [CSS Style Guide](https://github.com/styleguide) and prepend js- to classes used in JavaScript (may break some implementations).
