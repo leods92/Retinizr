@@ -152,6 +152,8 @@
   //
   // Google Static Maps
   //
+  R.googleStaticMapsUrlSizeRegexp = /size=([0-9]+)x([0-9]+)/;
+
   R.scaleGoogleStaticMaps = function() {
     var maps = R.getGoogleStaticMapsList();
     R.scaleItems("scaleGoogleStaticMap", maps);
@@ -162,18 +164,19 @@
   };
 
   R.scaleGoogleStaticMap = function(map) {
-    var dimensions = map.src.match(/size=([0-9]+)x([0-9]+)/),
-      regExp = /scale=1/
+    var dimensions  = map.src.match(R.googleStaticMapsUrlSizeRegexp)
+      , scaleRegExp = /scale=1/
+      , newScale    = options.googleStaticMaps.scale
     ;
 
     map.width = dimensions[1];
     map.height = dimensions[2];
 
-    if (map.src.match(regExp)) {
-      map.src = map.src.replace(regExp, "scale=" + options.google_static_maps.scale);
+    if (map.src.match(scaleRegExp)) {
+      newSrc = newSrc.replace(scaleRegExp, "scale=" + newScale);
     }
     else {
-      map.src += "&scale=2";
+      newSrc += "&scale=" + newScale;
     }
   };
 
