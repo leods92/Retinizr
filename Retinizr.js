@@ -187,7 +187,7 @@
   };
 
   R.getGravatarsList = function() {
-    return R.getList(options.gravatars.css_class);
+    return R.getList(options.gravatars.cssClass);
   };
 
   R.scaleGravatar = function(gravatar) {
