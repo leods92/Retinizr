@@ -1,3 +1,14 @@
+# TODO
+* Better organize code by adding different name spaces.
+
+# Version 1.0.0
+* Standardized variables to be camelCased.
+* Changed defaults to follow Github [CSS Style Guide](https://github.com/styleguide) and prepend js- to classes used in JavaScript (may break some implementations).
+* Removed jQuery dependencies (shouldn't be here anyway).
+* Fixed bug preventing images from being scaled when images were cached.
+* Fixed: scale set in options not being used when url doesn't have scale in query-string. (google static map)
+* Added option to make google static maps fluid by adding js-retinizr-fluid to map image class.
+
 # Version 0.1.6
 * Fixed bug: Retinizr now waits images to be fully loaded so that it can capture their original sizes.
 
