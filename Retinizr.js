@@ -30,19 +30,19 @@
 
     , images: {
         // The CSS class your upgradeable images have.
-        cssClass: "js-retinizr-image"
+        cssClass: 'js-retinizr-image'
 
         // The text before high resolution images' extension.
         // E.g.: logo.png => logo@2x.png.
         // Note: regular expression characters must be escaped.
-      , sourceSuffix: "@2x"
+      , sourceSuffix: '@2x'
 
         // ~> data-retinizr-hires-url
-      , dataAttribute: "retinizr-hires-url"
+      , dataAttribute: 'retinizr-hires-url'
     }
 
     , googleStaticMaps: {
-        cssClass: "js-retinizr-map"
+        cssClass: 'js-retinizr-map'
 
       // fluidCssClass is used to automatically change width
       // based on image's container.
@@ -51,15 +51,15 @@
       //
       // Watch out: this feature is inteded for mobile devices.
       // That said, if you use the free static maps API,
-      // Google will limit "browser width" to 640px 
-      , fluidCssClass: "js-retinizr-fluid"
+      // Google will limit 'browser width' to 640px 
+      , fluidCssClass: 'js-retinizr-fluid'
 
       // Google also provides scale=4 for Business API users
       , scale: 2
     }
 
     , gravatars: {
-        cssClass: "js-retinizr-gravatar"
+        cssClass: 'js-retinizr-gravatar'
 
       // Be careful not to exceed Gravatar's limit that is 2048px.
       // Note that even though the image provided will be in the requested
@@ -73,13 +73,13 @@
     newOptions = newOptions || {};
 
     var pickOption = function(custom, _default) {
-      return typeof custom !== "undefined" ? custom : _default;
+      return typeof custom !== 'undefined' ? custom : _default;
     };
 
     for (var prop in defaults) {
-      if (typeof defaults[prop] === "object") {
+      if (typeof defaults[prop] === 'object') {
         // In case a boolean was set, we'll set all options as default.
-        if (typeof newOptions[prop] !== "object") {
+        if (typeof newOptions[prop] !== 'object') {
           options[prop] = defaults[prop];
           continue;
         }
@@ -111,7 +111,7 @@
   //
   R.scaleImages = function() {
     var images = R.getImagesList();
-    R.scaleItems("scaleImage", images);
+    R.scaleItems('scaleImage', images);
   };
 
   R.getImagesList = function() {
@@ -119,7 +119,7 @@
   };
 
   R.scaledImageName = function(img) {
-    var dataAttribute = "data-" + options.images.dataAttribute
+    var dataAttribute = 'data-' + options.images.dataAttribute
       , manualUrl = img.getAttribute(dataAttribute)
     ;
 
@@ -127,7 +127,7 @@
       return manualUrl;
     }
     else {
-      // about ".*?" - the "?" prevents it from not matching the extension
+      // about '.*?' - the '?' prevents it from not matching the extension
       return img.src.replace(/^(.*?)(\.[a-z]{3,4})?$/, '$1' + options.images.sourceSuffix + '$2');
     }
   };
@@ -150,7 +150,7 @@
   R.loadImage = function(src, callback) {
     var xhr = new XMLHttpRequest();
 
-    xhr.open("GET", src, true);
+    xhr.open('GET', src, true);
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
         // Only images that really exists will replace current images.
@@ -168,7 +168,7 @@
 
   R.scaleGoogleStaticMaps = function() {
     var maps = R.getGoogleStaticMapsList();
-    R.scaleItems("scaleGoogleStaticMap", maps);
+    R.scaleItems('scaleGoogleStaticMap', maps);
   };
 
   R.getGoogleStaticMapsList = function() {
@@ -181,8 +181,8 @@
     // otherwise because width is set height is ignored
     // (to keep proportion, apparently.)
     // Height must be set beforehand, to avoid page reflow.
-    map.style.height = typeof height == "string" ? height : height + "px";
-    map.style.width = typeof width == "string" ? width : width + "px";
+    map.style.height = typeof height == 'string' ? height : height + 'px';
+    map.style.width = typeof width == 'string' ? width : width + 'px';
   };
 
   R.updateFluidGoogleStaticMapResizeTimeout = null;
@@ -198,7 +198,7 @@
 
   R.updateFluidGoogleStaticMapSrc = function(map, src, beforeRequestCb) {
     // Hiding image not to display distorted image while the new one loads.
-    map.style.visibility = "hidden";
+    map.style.visibility = 'hidden';
 
     if (beforeRequestCb) { beforeRequestCb(); }
 
@@ -218,7 +218,7 @@
     // Using clientWidth not offsetWidth not to get borders.
     var newWidth     = map.parentNode.clientWidth
       , cachedHeight = map.offsetHeight
-      , newSize      = "size=" + newWidth + "x$2"
+      , newSize      = 'size=' + newWidth + 'x$2'
     ;
 
     // Useful to be called when src is being changed by another function.
@@ -232,11 +232,11 @@
       });
     }
 
-    // "If multiple identical EventListeners are registered on the same
+    // 'If multiple identical EventListeners are registered on the same
     // EventTarget with the same parameters, the duplicate instances
-    // are discarded."
+    // are discarded.'
     // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Multiple_identical_event_listeners
-    window.addEventListener("resize", function() {
+    window.addEventListener('resize', function() {
       R.updateFluidGoogleStaticMapOnResize(map);
     });
   };
@@ -248,15 +248,15 @@
       , newSrc      = map.src
     ;
 
-    // Saving "displayed resolution" so that new scale keeps size
+    // Saving 'displayed resolution' so that new scale keeps size
     // but increses pixel density.
     R.updateGoogleStaticMapDimensions(map, dimensions[1], dimensions[2]);
 
     if (map.src.match(scaleRegExp)) {
-      newSrc = newSrc.replace(scaleRegExp, "scale=" + newScale);
+      newSrc = newSrc.replace(scaleRegExp, 'scale=' + newScale);
     }
     else {
-      newSrc += "&scale=" + newScale;
+      newSrc += '&scale=' + newScale;
     }
 
     if (~map.className.indexOf(options.googleStaticMaps.fluidCssClass)) {
@@ -273,7 +273,7 @@
   //
   R.scaleGravatars = function() {
     var gravatars = R.getGravatarsList();
-    R.scaleItems("scaleGravatar", gravatars);
+    R.scaleItems('scaleGravatar', gravatars);
   };
 
   R.getGravatarsList = function() {
@@ -286,7 +286,7 @@
     ;
 
     gravatar.width = size;
-    gravatar.src = gravatar.src.replace(regex, "$1=" + parseInt(size, 10) * options.gravatars.scale);
+    gravatar.src = gravatar.src.replace(regex, '$1=' + parseInt(size, 10) * options.gravatars.scale);
   };
 
 
@@ -329,7 +329,7 @@
 
   R.checkHTMLElement = function(el) {
     if (!(el instanceof HTMLImageElement)) {
-      throw "Element is not an img element.";
+      throw 'Element is not an img element.';
     }
   };
 
