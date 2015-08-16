@@ -204,13 +204,17 @@
 
     map.src = src;
 
-    map.addEventListener("load", function() {
-      map.style.visibility = "visible";
+    map.addEventListener('retinizr:img:load', function() {
+      map.style.visibility = 'visible';
+    });
+
+    map.addEventListener('load', function() {
+      R.triggerEvent(map, 'retinizr:img:load');
     });
 
     // Triggering load manually when image is already cached.
     if (map.complete) {
-      map.dispatchEvent(new UIEvent("load"));
+      R.triggerEvent(map, 'retinizr:img:load');
     }
   };
 
@@ -293,36 +297,48 @@
   //
   // Helpers
   //
+  R.triggerEvent = function(element, eventName) {
+    var event = document.createEvent('Event');
+    event.initEvent(eventName, true, true);
+    element.dispatchEvent(event);
+  };
+
   R.scaleItems = function(scalingFunction, items) {
     if (!items) return; // returns if null or undefined
+
+    // Ensures images are fully loaded before scaling them.
+    // This is necessary because we need image's dimensions.
+    function scale() {
+      // It'll only replace the image if it wasn't scaled yet.
+      // Otherwise we'd be in a loop, given that new image
+      // may also trigger the load event.
+      if (R.elWasScaled(this)) { return; }
+
+      if (R.deviceRequiresRetinazation()) {
+        R[scalingFunction](this);
+      }
+      else if (scalingFunction == 'scaleGoogleStaticMap') {
+        // To save an extra HTTP request, scaleGoogleStaticMaps
+        // already makes width fluid when retinizing (above).
+        R.updateFluidGoogleStaticMap(this);
+      }
+
+      R.setElWasScaled(this);
+    }
 
     Array.prototype.forEach.call(items, function(item) {
       R.checkHTMLElement(item);
 
-      // Ensures images are fully loaded before scaling them.
-      // This is necessary because we need image's dimensions.
-      item.addEventListener("load", function() {
-        // It'll only replace the image if it wasn't scaled yet.
-        // Otherwise we'd be in a loop, given that new image
-        // may also trigger the load event.
-        if (R.elWasScaled(item)) { return; }
+      item.addEventListener('retinizr:img:load', scale);
 
-        if (R.deviceRequiresRetinazation()) {
-          R[scalingFunction](item);
-        }
-        else if (scalingFunction == "scaleGoogleStaticMap") {
-          // To save an extra HTTP request, scaleGoogleStaticMaps
-          // already makes width fluid when retinizing (above).
-          R.updateFluidGoogleStaticMap(item);
-        }
-
-        R.setElWasScaled(item);
+      item.addEventListener('load', function() {
+        R.triggerEvent(item, 'retinizr:img:load');
       });
 
       // If image is cached, no load event is triggered.
       // Therefore its callbacks should be triggered manually.
       if (item.complete) {
-        item.dispatchEvent(new UIEvent("load"));
+        R.triggerEvent(item, 'retinizr:img:load');
       }
     });
   };
